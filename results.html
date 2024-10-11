@@ -9,19 +9,22 @@
             font-family: Arial, sans-serif;
             margin: 20px;
         }
-        ul {
-            list-style-type: none; /* Removes default list styling */
-            padding: 0;
+        table {
+            border-collapse: collapse;
+            width: 100%;
         }
-        li {
-            padding: 8px;
+        th, td {
             border: 1px solid #ddd;
-            margin-top: 5px; /* Space between list items */
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
         }
     </style>
 </head>
 <body>
-    <h1></h1>
+    <h1>County Results</h1>
     <div id="results"></div>
     <div id="error" style="color: red;"></div>
 
@@ -41,17 +44,22 @@
                     displayError("No data found or unexpected response structure.");
                 }
             })
-            .catch(() => displayError("An error occurred while fetching data."));
+            .catch(err => {
+                console.error(err);
+                displayError("An error occurred while fetching data.");
+            });
 
         function displayResults(counties) {
             const resultsDiv = document.getElementById('results');
 
             if (counties.length > 0) {
-                let html = `<ul>`;
+                let html = `<table>`;
+                html += `<thead><tr><th>County</th></tr></thead>`;
+                html += `<tbody>`;
                 counties.forEach(county => {
-                    html += `<li>${county}</li>`;
+                    html += `<tr><td>${county}</td></tr>`;
                 });
-                html += `</ul>`;
+                html += `</tbody></table>`;
                 resultsDiv.innerHTML = html;
                 document.getElementById('error').innerText = ''; // Clear error message
             } else {
