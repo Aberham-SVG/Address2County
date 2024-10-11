@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>County Finder</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Abraham's Address2Countyinator 3000</h1>
+    <label for="search_query">Enter an address to be Countyinatored:</label>
+    <input type="text" id="search_query" required>
+    <button id="search_button">Search</button>
+
+    <script>
+        document.getElementById('search_button').onclick = function() {
+            const query = document.getElementById('search_query').value;
+            // Open results.html in a new tab with the query parameter
+            const newTab = window.open(`results.html?query=${encodeURIComponent(query)}`, '_blank');
+            newTab.focus();
+        };
+    </script>
+</body>
+</html>
