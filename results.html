@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>County Results</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        ul {
+            list-style-type: none; /* Removes default list styling */
+            padding: 0;
+        }
+        li {
+            padding: 8px;
+            border: 1px solid #ddd;
+            margin-top: 5px; /* Space between list items */
+        }
+    </style>
+</head>
+<body>
+    <h1>County Results</h1>
+    <div id="results"></div>
+    <div id="error" style="color: red;"></div>
+
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const query = params.get('query');
+        const apiKey = 'ede39a0b71a3da11a1f1d9dcb26c0558'; // Use your actual API key here
+        const url = `https://api.positionstack.com/v1/forward?access_key=${apiKey}&query=${query}`;
+
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                if (data.data && Array.isArray(data.data)) {
+                    const counties = data.data.map(item => item.county).filter(county => county);
+                    displayResults(counties);
+                } else {
+                    displayError("No data found or unexpected response structure.");
+                }
+            })
+            .catch(() => displayError("An error occurred while fetching data."));
+
+        function displayResults(counties) {
+            const resultsDiv = document.getElementById('results');
+
+            if (counties.length > 0) {
+                let html = `<ul>`;
+                counties.forEach(county => {
+                    html += `<li>${county}</li>`;
+                });
+                html += `</ul>`;
+                resultsDiv.innerHTML = html;
+                document.getElementById('error').innerText = ''; // Clear error message
+            } else {
+                displayError("No county names found.");
+            }
+        }
+
+        function displayError(message) {
+            document.getElementById('error').innerText = message;
+            document.getElementById('results').innerHTML = ''; // Clear previous results
+        }
+    </script>
+</body>
+</html>
